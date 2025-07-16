@@ -42,6 +42,7 @@ async function mostrarItens(filtro = 'todos') {
     listaItens.appendChild(tr);
   });
 
+  // Botões de remoção
   document.querySelectorAll('.btn-remover').forEach(btn => {
     btn.onclick = async e => {
       const id = e.target.getAttribute('data-id');
@@ -56,12 +57,12 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
 
   const novoItem = {
-    tipo: form.tipo.value.trim(),
-    model: form.model.value.trim(),
-    produto_id: form.id.value.trim(),
-    quant: Number(form.quant.value),
-    categoria: form.categoria.value,
-    description: form.description.value.trim()
+    tipo: document.getElementById('tipo').value.trim(),
+    model: document.getElementById('model').value.trim(),
+    produto_id: document.getElementById('produto_id').value.trim(),
+    quant: Number(document.getElementById('quant').value),
+    categoria: document.getElementById('categoria').value,
+    description: document.getElementById('description').value.trim()
   };
 
   const { error } = await supabase.from('estoque').insert(novoItem);
@@ -75,10 +76,10 @@ form.addEventListener('submit', async e => {
   mostrarItens(filtroCategoria.value);
 });
 
-// Filtrar por categoria
+// Filtro por categoria
 filtroCategoria.addEventListener('change', () => {
   mostrarItens(filtroCategoria.value);
 });
 
-// Inicializa
+// Inicializar
 mostrarItens();
