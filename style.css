@@ -1,0 +1,171 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+  background-color: #f9f9f9;
+  color: #333;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #0a74da;
+}
+
+/* Main */
+main {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Seções */
+section {
+  margin-bottom: 25px;
+}
+
+/* Formulário */
+.formulario h2 {
+  margin-bottom: 15px;
+  color: #0a74da;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+form input, form select {
+  flex: 1 1 200px;
+  padding: 10px 12px;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus, form select:focus {
+  border-color: #0a74da;
+  outline: none;
+}
+
+form button {
+  padding: 12px 25px;
+  background-color: #0a74da;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  flex: 1 1 100%;
+  max-width: 200px;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #084d9e;
+}
+
+/* Filtro */
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+  color: #555;
+}
+
+.filtro label {
+  white-space: nowrap;
+}
+
+.filtro select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.filtro select:focus {
+  border-color: #0a74da;
+  outline: none;
+}
+
+/* Lista - tabela */
+#lista-itens {
+  width: 100%;
+  border-collapse: collapse;
+  max-height: 300px;
+  overflow-y: auto;
+  display: block; /* Permite scroll vertical */
+}
+
+#lista-itens thead {
+  background-color: #0a74da;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+#lista-itens th, #lista-itens td {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+  min-width: 100px;
+  white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+}
+
+#lista-itens tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#lista-itens tbody tr:hover {
+  background-color: #e6f0ff;
+}
+
+#lista-itens button.btn-remover {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #e03e3e;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#lista-itens button.btn-remover:hover {
+  color: #a82929;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  color: #777;
+}

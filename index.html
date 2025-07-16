@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Estoque</h1>
+  </header>
+
+  <main>
+    <!-- Formulário para adicionar item -->
+    <section class="formulario">
+      <h2>Adicionar Item</h2>
+      <form id="item-form">
+        <input type="text" id="tipo" placeholder="Tipo de Produto" required />
+        <input type="text" id="model" placeholder="Veículo/Modelo" required />
+        <input type="text" id="id" placeholder="ID do Produto" required />
+        <input type="number" id="quant" placeholder="Quantidade" required />
+        <input type="text" id="description" placeholder="Descrição" required />
+
+    <select id="categoria" required>
+        <option value="">Selecione a categoria</option>
+
+         <optgroup label="Filtros">
+            <option value="óleo">Filtros de Óleo</option>
+            <option value="ar">Filtros de Ar</option>
+            <option value="comb">Filtros de Combustíveis</option>
+         </optgroup>
+
+         <optgroup label="Freio">
+            <option value="pastilha">Pastilhas de Freio</option>
+         </optgroup>
+
+         <optgroup label="Peças DIversas">
+            <option value="interior">Interior</option>
+            <option value="exterior">Exterior</option>
+            <option value="sensores">Sensores</option>
+            <option value="tecnologia">Tecnologias</option>
+            <option value="diversos">Diversos</option>
+         </optgroup>
+
+        </select>
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+
+    <!-- Filtro -->
+    <section class="filtro">
+      <label for="filtro-categoria">Filtrar por categoria:</label>
+      <select id="filtro-categoria">
+
+        <option value="todos">Todos</option>
+        <optgroup label="Filtros">
+            <option value="óleo">Filtros de Óleo</option>
+            <option value="ar">Filtros de Ar</option>
+            <option value="comb">Filtros de Combustíveis</option>
+        </optgroup>
+
+        <optgroup label="Freio">
+            <option value="pastilha">Pastilhas de Freio</option>
+        </optgroup>
+
+        <optgroup label="Peças DIversas">
+            <option value="interior">Interior</option>
+            <option value="exterior">Exterior</option>
+            <option value="sensores">Sensores</option>
+            <option value="tecnologia">Tecnologias</option>
+            <option value="diversos">Diversos</option>
+        </optgroup>
+      </select>
+    </section>
+
+    <!-- Lista de itens -->
+    <section class="lista">
+  <h2>Itens no Estoque</h2>
+  <table id="lista-itens" border="1" cellspacing="0" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Modelo</th>
+        <th>ID</th>
+        <th>Quantidade</th>
+        <th>Categoria</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Itens vão aqui -->
+    </tbody>
+  </table>
+</section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Sistema de Estoque</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
