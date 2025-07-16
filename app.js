@@ -1,6 +1,8 @@
 const supabaseUrl = "https://mvhmwahesfnxjarftmxe.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12aG13YWhlc2ZueGphcmZ0bXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2OTU0MzcsImV4cCI6MjA2ODI3MTQzN30.5XTYVIepzAnWrPYGSUk5OT1hS2p8QoqGm0JP0gD1hVs";
+
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 
 const form = document.getElementById('item-form');
 const listaItens = document.querySelector('#lista-itens tbody');
