@@ -1,70 +1,84 @@
+const supabaseUrl = "https://mvhmwahesfnxjarftmxe.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12aG13YWhlc2ZueGphcmZ0bXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2OTU0MzcsImV4cCI6MjA2ODI3MTQzN30.5XTYVIepzAnWrPYGSUk5OT1hS2p8QoqGm0JP0gD1hVs";
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 const form = document.getElementById('item-form');
 const listaItens = document.querySelector('#lista-itens tbody');
 const filtroCategoria = document.getElementById('filtro-categoria');
 
-let itens = JSON.parse(localStorage.getItem('estoque')) || [];
-
-function salvarItens() {
-  localStorage.setItem('estoque', JSON.stringify(itens));
-}
-
-function mostrarItens(filtro = 'todos') {
+// Mostrar itens do Supabase
+async function mostrarItens(filtro = 'todos') {
   listaItens.innerHTML = '';
 
-  const itensFiltrados = filtro === 'todos' ? itens : itens.filter(i => i.categoria === filtro);
+  let { data: itens, error } = await supabase.from('estoque').select('*');
+
+  if (error) {
+    console.error('Erro ao buscar itens:', error.message);
+    return;
+  }
+
+  const itensFiltrados = filtro === 'todos'
+    ? itens
+    : itens.filter(i => i.categoria === filtro);
 
   if (itensFiltrados.length === 0) {
     listaItens.innerHTML = `<tr><td colspan="7" style="text-align:center;">Nenhum item encontrado.</td></tr>`;
     return;
   }
 
-  itensFiltrados.forEach((item, index) => {
+  itensFiltrados.forEach(item => {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
       <td>${item.tipo}</td>
       <td>${item.model}</td>
-      <td>${item.id}</td>
+      <td>${item.produto_id}</td>
       <td>${item.quant}</td>
       <td>${item.categoria}</td>
       <td>${item.description}</td>
-      <td><button class="btn-remover" data-index="${index}">❌</button></td>
+      <td><button class="btn-remover" data-id="${item.id}">❌</button></td>
     `;
 
     listaItens.appendChild(tr);
   });
 
   document.querySelectorAll('.btn-remover').forEach(btn => {
-    btn.onclick = e => {
-      const idx = e.target.getAttribute('data-index');
-      itens.splice(idx, 1);
-      salvarItens();
+    btn.onclick = async e => {
+      const id = e.target.getAttribute('data-id');
+      await supabase.from('estoque').delete().eq('id', id);
       mostrarItens(filtroCategoria.value);
     };
   });
 }
 
-form.addEventListener('submit', e => {
+// Adicionar novo item
+form.addEventListener('submit', async e => {
   e.preventDefault();
 
   const novoItem = {
     tipo: form.tipo.value.trim(),
     model: form.model.value.trim(),
-    id: form.id.value.trim(),
+    produto_id: form.id.value.trim(),
     quant: Number(form.quant.value),
-    description: form.description.value.trim(),
-    categoria: form.categoria.value
+    categoria: form.categoria.value,
+    description: form.description.value.trim()
   };
 
-  itens.push(novoItem);
-  salvarItens();
-  mostrarItens(filtroCategoria.value);
+  const { error } = await supabase.from('estoque').insert(novoItem);
+
+  if (error) {
+    alert('Erro ao adicionar item: ' + error.message);
+    return;
+  }
 
   form.reset();
+  mostrarItens(filtroCategoria.value);
 });
 
+// Filtrar por categoria
 filtroCategoria.addEventListener('change', () => {
   mostrarItens(filtroCategoria.value);
 });
 
+// Inicializa
 mostrarItens();
