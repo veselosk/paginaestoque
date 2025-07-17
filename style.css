@@ -117,7 +117,7 @@ form button:hover {
 #lista-itens {
   width: 100%;
   border-collapse: collapse;
-  max-height: 800px;
+  max-height: 600px;
   overflow-y: auto;
 }
 
@@ -186,4 +186,3 @@ footer {
     padding: 6px;
   }
 }
-
