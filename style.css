@@ -119,7 +119,6 @@ form button:hover {
   border-collapse: collapse;
   max-height: 800px;
   overflow-y: auto;
-  display: block; /* Permite scroll vertical */
 }
 
 #lista-itens thead {
