@@ -169,3 +169,22 @@ footer {
   font-size: 0.9rem;
   color: #777;
 }
+
+@media (max-width: 768px) {
+  #filtros, #formulario {
+    flex-direction: column;
+  }
+
+  input, select, button {
+    width: 100%;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+}
+
