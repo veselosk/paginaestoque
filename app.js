@@ -1,9 +1,9 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
+// Conexão com Supabase
 const supabaseUrl = "https://mvhmwahesfnxjarftmxe.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12aG13YWhlc2ZueGphcmZ0bXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2OTU0MzcsImV4cCI6MjA2ODI3MTQzN30.5XTYVIepzAnWrPYGSUk5OT1hS2p8QoqGm0JP0gD1hVs";
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+// Elementos
 const form = document.getElementById('item-form');
 const listaItens = document.querySelector('#lista-itens tbody');
 const filtroCategoria = document.getElementById('filtro-categoria');
@@ -11,7 +11,8 @@ const filtroCategoria = document.getElementById('filtro-categoria');
 // Mostrar itens
 async function mostrarItens(filtro = 'todos') {
   listaItens.innerHTML = '';
-  const { data: itens, error } = await supabase.from('estoque').select('*');
+
+  let { data: itens, error } = await supabase.from('estoque').select('*');
 
   if (error) {
     console.error('Erro ao buscar itens:', error.message);
@@ -48,20 +49,20 @@ async function mostrarItens(filtro = 'todos') {
   });
 }
 
-// Adicionar item
+// Adicionar novo item
 form.addEventListener('submit', async e => {
   e.preventDefault();
 
   const novoItem = {
-    tipo: form.tipo.value.trim(),
-    model: form.model.value.trim(),
-    produto_id: form.produto_id.value.trim(),
-    quant: Number(form.quant.value),
-    categoria: form.categoria.value,
-    description: form.description.value.trim()
+    tipo: document.getElementById('tipo').value.trim(),
+    model: document.getElementById('model').value.trim(),
+    produto_id: document.getElementById('produto_id').value.trim(),
+    quant: parseInt(document.getElementById('quant').value),
+    categoria: document.getElementById('categoria').value,
+    description: document.getElementById('description').value.trim()
   };
 
-  const { error } = await supabase.from('estoque').insert(novoItem);
+  const { error } = await supabase.from('estoque').insert([novoItem]);
 
   if (error) {
     alert('Erro ao adicionar item: ' + error.message);
@@ -72,10 +73,10 @@ form.addEventListener('submit', async e => {
   mostrarItens(filtroCategoria.value);
 });
 
-// Filtrar
+// Filtro de categoria
 filtroCategoria.addEventListener('change', () => {
   mostrarItens(filtroCategoria.value);
 });
 
-// Inicializar
+// Iniciar
 mostrarItens();
