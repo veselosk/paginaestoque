@@ -30,7 +30,7 @@ header h1 {
 /* Main */
 main {
   flex: 1;
-  max-width: 950px;
+  max-width: 1325px;
   margin: 0 auto;
   background: #fff;
   padding: 25px 30px;
@@ -187,3 +187,4 @@ footer {
     padding: 6px;
   }
 }
+
