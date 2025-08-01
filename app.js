@@ -1,25 +1,58 @@
-// Conexão com Supabase
-const supabaseUrl = "https://mvhmwahesfnxjarftmxe.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12aG13YWhlc2ZueGphcmZ0bXhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2OTU0MzcsImV4cCI6MjA2ODI3MTQzN30.5XTYVIepzAnWrPYGSUk5OT1hS2p8QoqGm0JP0gD1hVs";
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// 🔗 Configuração do JSONBin
+const BIN_ID = '688d03e7f7e7a370d1f1c1a8';
+const MASTER_KEY = '$2a$10$PykMSAtn5B6alL3JT.p5u.yLqJY3kiPmUachbC7NLfblp/0gXcvDy';
+const url = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-// Elementos
+// 🔄 Lista local (cache)
+let itens = [];
+
+// 🔧 Elementos do DOM
 const form = document.getElementById('item-form');
 const listaItens = document.querySelector('#lista-itens tbody');
 const filtroCategoria = document.getElementById('filtro-categoria');
 
-// Mostrar itens
-async function mostrarItens(filtro = 'todos') {
+// ⬇️ Carregar dados do JSONBin
+async function carregarItens() {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'X-Master-Key': MASTER_KEY
+      }
+    });
+
+    const json = await res.json();
+    itens = json.record;
+    mostrarItens();
+  } catch (err) {
+    console.error('Erro ao carregar JSONBin:', err);
+    listaItens.innerHTML = `<tr><td colspan="7">Erro ao carregar itens.</td></tr>`;
+  }
+}
+
+// 💾 Salvar dados no JSONBin
+async function salvarItens() {
+  try {
+    await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': MASTER_KEY
+      },
+      body: JSON.stringify(itens)
+    });
+  } catch (err) {
+    console.error('Erro ao salvar JSONBin:', err);
+    alert('Erro ao salvar os dados!');
+  }
+}
+
+// 📋 Mostrar itens na tabela
+function mostrarItens(filtro = 'todos') {
   listaItens.innerHTML = '';
 
-  let { data: itens, error } = await supabase.from('estoque').select('*');
-
-  if (error) {
-    console.error('Erro ao buscar itens:', error.message);
-    return;
-  }
-
-  const itensFiltrados = filtro === 'todos' ? itens : itens.filter(i => i.categoria === filtro);
+  const itensFiltrados = filtro === 'todos'
+    ? itens
+    : itens.filter(i => i.categoria === filtro);
 
   if (itensFiltrados.length === 0) {
     listaItens.innerHTML = `<tr><td colspan="7" style="text-align:center;">Nenhum item encontrado.</td></tr>`;
@@ -41,19 +74,21 @@ async function mostrarItens(filtro = 'todos') {
   });
 
   document.querySelectorAll('.btn-remover').forEach(btn => {
-    btn.onclick = async e => {
-      const id = e.target.getAttribute('data-id');
-      await supabase.from('estoque').delete().eq('id', id);
+    btn.onclick = e => {
+      const id = parseInt(e.target.getAttribute('data-id'));
+      itens = itens.filter(i => i.id !== id);
+      salvarItens();
       mostrarItens(filtroCategoria.value);
     };
   });
 }
 
-// Adicionar novo item
-form.addEventListener('submit', async e => {
+// ➕ Adicionar novo item
+form.addEventListener('submit', e => {
   e.preventDefault();
 
   const novoItem = {
+    id: Date.now(),
     tipo: document.getElementById('tipo').value.trim(),
     model: document.getElementById('model').value.trim(),
     produto_id: document.getElementById('produto_id').value.trim(),
@@ -62,21 +97,16 @@ form.addEventListener('submit', async e => {
     description: document.getElementById('description').value.trim()
   };
 
-  const { error } = await supabase.from('estoque').insert([novoItem]);
-
-  if (error) {
-    alert('Erro ao adicionar item: ' + error.message);
-    return;
-  }
-
+  itens.push(novoItem);
+  salvarItens();
   form.reset();
   mostrarItens(filtroCategoria.value);
 });
 
-// Filtro de categoria
+// 🎯 Filtro de categoria
 filtroCategoria.addEventListener('change', () => {
   mostrarItens(filtroCategoria.value);
 });
 
-// Iniciar
-mostrarItens();
+// 🚀 Inicialização
+carregarItens();
